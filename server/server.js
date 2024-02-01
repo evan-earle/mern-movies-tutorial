@@ -4,6 +4,7 @@ import cors from "cors";
 import morgan from "morgan";
 import dotenv from "dotenv";
 import path from "path";
+import { connectToDB } from "./config/database.js";
 
 dotenv.config({ path: "./config/.env" });
 
@@ -14,6 +15,9 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(morgan("dev"));
+
+//Connect to DB
+connectToDB();
 
 //Start server
 app.listen(process.env.PORT, () =>
