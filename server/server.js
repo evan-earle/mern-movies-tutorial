@@ -5,7 +5,7 @@ import morgan from "morgan";
 import dotenv from "dotenv";
 import path from "path";
 import { connectToDB } from "./config/database.js";
-
+import allRoutes from "./routes/index.js";
 dotenv.config({ path: "./config/.env" });
 
 //Create an express app
@@ -15,6 +15,17 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(morgan("dev"));
+
+//Routes
+app.use("/api", allRoutes);
+
+//Error handler
+app.use((err, req, res, next) => {
+  console.log(err);
+  const status = err.statusCode || 500;
+  const message = err.message || "Internal server error";
+  return res.status(status).json({ message, stack: err.stack });
+});
 
 //Connect to DB
 connectToDB();
