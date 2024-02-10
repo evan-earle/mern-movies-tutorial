@@ -21,7 +21,23 @@ export const register = async (req, res, next) => {
     await newUser.save();
     return res.status(201).json("New user created");
   } catch (error) {
-    console.log(error);
+    return next(error);
+  }
+};
+
+export const uploadPhoto = async (req, res, next) => {
+  cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+  });
+  try {
+    const fileStr = req.body.data;
+    const uploadedResponse = await cloudinary.uploader.upload(fileStr, {
+      upload_preset: "ml_default",
+    });
+    return res.status(200).json(uploadedResponse);
+  } catch (error) {
     return next(error);
   }
 };
