@@ -41,3 +41,17 @@ export const uploadPhoto = async (req, res, next) => {
     return next(error);
   }
 };
+
+export const storePhoto = async (req, res, next) => {
+  try {
+    const data = await User.findOneAndUpdate(
+      {
+        email: req.body.email,
+      },
+      { image: req.body.photo }
+    );
+    return res.status(200), json(data);
+  } catch (error) {
+    return next(error);
+  }
+};
