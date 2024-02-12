@@ -55,3 +55,42 @@ export const storePhoto = async (req, res, next) => {
     return next(error);
   }
 };
+
+export const login = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ email: req.body.email });
+    if (!user) {
+      return next({ status: 404, message: "No user found" });
+    }
+
+    const isPasswordCorrect = await bcryptjs.compare(
+      req.body.password,
+      user.password
+    );
+    if (!isPasswordCorrect) {
+      return next({ status: 400, message: "Password is incorrect" });
+    }
+    const payload = {
+      id: user._id,
+      name: user.name,
+    };
+    const token = jwt.sign(payload, process.env.JWT_TOKEN, {
+      expiresIn: "1d",
+    });
+    return res
+      .cookie("access_token", token, {
+        httpOnly: true,
+      })
+      .status(200)
+      .json({
+        message: "Login successful",
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        image: user.image,
+        token: token,
+      });
+  } catch (error) {
+    return next(error);
+  }
+};
