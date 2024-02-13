@@ -94,3 +94,22 @@ export const login = async (req, res, next) => {
     return next(error);
   }
 };
+
+export const logout = async (req, res, next) => {
+  try {
+    res.clearCookie("access_token");
+    return res.status(200).json({ message: "Logout successful" });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const isLoggedIn = async (req, res, next) => {
+  const token = req.cookies.access_token;
+  if (!token) {
+    return res.json(false);
+  }
+  return jwt.verify(token, process.env.JWT_TOKEN, (err) => {
+    err ? false : true;
+  });
+};
