@@ -50,7 +50,7 @@ export const storePhoto = async (req, res, next) => {
       },
       { image: req.body.photo }
     );
-    return res.status(200), json(data);
+    return res.status(200).json(data);
   } catch (error) {
     return next(error);
   }
