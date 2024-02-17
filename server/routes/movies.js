@@ -2,8 +2,8 @@ import express from "express";
 import {
   getGenres,
   getMovie,
-  getPopularMovies,
   searchMovies,
+  getPopularMovies,
 } from "../controllers/movies.js";
 
 const router = express.Router();
