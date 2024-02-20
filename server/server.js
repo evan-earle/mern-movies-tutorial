@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import path from "path";
 import { connectToDB } from "./config/database.js";
 import allRoutes from "./routes/index.js";
+import cookieParser from "cookie-parser";
 dotenv.config({ path: "./config/.env" });
 
 //Create an express app
@@ -15,6 +16,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(morgan("dev"));
+app.use(cookieParser());
 
 //Routes
 app.use("/api", allRoutes);

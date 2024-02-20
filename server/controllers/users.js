@@ -33,7 +33,24 @@ export const getWatchlist = async (req, res, next) => {
 };
 
 export const addWatchlist = async (req, res, next) => {
+  const id = req.params.id;
   try {
+    const data = await User.findById(req.user.id, {}).select("watchlist");
+
+    if (data.watchlist.includes(id) === true) {
+      res.status(200).json(true);
+    } else {
+      await User.findByIdAndUpdate(
+        req.user.id,
+        {
+          $addToSet: {
+            watchlist: id,
+          },
+        },
+        { new: true }
+      );
+      return res.status(200).json(false);
+    }
   } catch (error) {
     return next(error);
   }
@@ -41,6 +58,16 @@ export const addWatchlist = async (req, res, next) => {
 
 export const deleteWatchlist = async (req, res, next) => {
   try {
+    const data = await User.findByIdAndUpdate(
+      req.user.id,
+      {
+        $pull: {
+          watchlist: req.params.id,
+        },
+      },
+      { new: true }
+    );
+    return res.status(200).json(data);
   } catch (error) {
     return next(error);
   }
