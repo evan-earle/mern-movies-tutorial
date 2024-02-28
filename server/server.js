@@ -18,6 +18,9 @@ app.use(cors());
 app.use(morgan("dev"));
 app.use(cookieParser());
 
+//Connect to DB
+connectToDB();
+
 //Routes
 app.use("/api", allRoutes);
 
@@ -28,9 +31,6 @@ app.use((err, req, res, next) => {
   const message = err.message || "Internal server error";
   return res.status(status).json({ message, stack: err.stack });
 });
-
-//Connect to DB
-connectToDB();
 
 //Start server
 app.listen(process.env.PORT, () =>
