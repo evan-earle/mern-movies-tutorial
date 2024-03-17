@@ -1,21 +1,33 @@
 import { Oval } from "react-loader-spinner";
 import { useState } from "react";
 
-export const Login = () => {
+export const Login = ({ authType }) => {
   const [loading, setLoading] = useState(false);
   const [guestLoading, setGuestLoading] = useState(false);
   const [show, setShow] = useState(false);
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+
   const showPassword = (e) => {
     e.preventDefault();
     setShow(!show);
   };
+
   return (
     <form className="w-1/3 bg-slate-50 rounded p-4 max-lg:w-2/3 max-sm:w-full">
       <div className="flex justify-evenly w-full">
-        <h3 className="text-center p-2 w-3/5 rounded-full cursor-pointer">
+        <h3
+          className={`text-center p-2 w-3/5 rounded-full cursor-pointer ${
+            authType !== "register" ? "bg-blue-200 " : null
+          }`}
+        >
           Login
+        </h3>
+        <h3
+          className="text-center p-2 w-3/5 rounded-full cursor-pointer"
+          onClick={() => authType("register")}
+        >
+          Register
         </h3>
       </div>
       <div className="flex flex-col mt-5">
@@ -55,11 +67,39 @@ export const Login = () => {
       <button
         className="mt-4 w-full rounded p-2 text-center bg-blue-500 text-white"
         type="submit"
-      ></button>
+      >
+        {loading ? (
+          <Oval
+            visible={true}
+            height="30"
+            width="30"
+            color="white"
+            secondaryColor="grey"
+            ariaLabel="oval-loading"
+            wrapperStyle={{ justifyContent: "center" }}
+          />
+        ) : (
+          "Login"
+        )}
+      </button>
       <button
         className="mt-2 w-full rounded p-2 text-center bg-slate-500 text-white"
         type="submit"
-      ></button>
+      >
+        {loading ? (
+          <Oval
+            visible={true}
+            height="30"
+            width="30"
+            color="white"
+            secondaryColor="grey"
+            ariaLabel="oval-loading"
+            wrapperStyle={{ justifyContent: "center" }}
+          />
+        ) : (
+          "Login as Guest"
+        )}
+      </button>
     </form>
   );
 };
